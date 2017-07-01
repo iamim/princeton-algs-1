@@ -1,3 +1,4 @@
 rootProject.name = 'princeton-algs-1'
 include 'percolation'
+include 'queues'
 
