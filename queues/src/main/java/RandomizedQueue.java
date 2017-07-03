@@ -68,7 +68,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     }
 
     private class RandomizedQueueIterator implements Iterator<Item> {
-        private Item[] itemLinks;
+        private final Item[] itemLinks;
         private int nextLinkIdx;
 
         RandomizedQueueIterator() {
