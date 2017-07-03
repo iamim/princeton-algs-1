@@ -57,6 +57,7 @@ class RandomizedQueueTests {
         }
     }
 
+
     @Nested
     @DisplayName("When a new instance")
     class ConstructorTests {
@@ -104,6 +105,7 @@ class RandomizedQueueTests {
             assertIterableEquals(new ArrayList<>(Arrays.asList()), rq);
         }
     }
+
 
     @Nested
     @DisplayName("When new instance is instantiated and one add is made")
@@ -162,6 +164,7 @@ class RandomizedQueueTests {
         }
     }
 
+
     @Nested
     @DisplayName("New instance, add one, delete one")
     class AddOneDeleteOneTests {
@@ -211,6 +214,7 @@ class RandomizedQueueTests {
             assertIterableEquals(new ArrayList<>(Arrays.asList()), rq);
         }
     }
+
 
     @Nested
     @DisplayName("New instance, add a bunch")
@@ -295,6 +299,71 @@ class RandomizedQueueTests {
             assertThat(it1Result, containsInAnyOrder(1, 2, 3, 4, 5));
             assertThat(it2Result, containsInAnyOrder(1, 2, 3, 4, 5));
             assertThat(it3Result, containsInAnyOrder(1, 2, 3, 4, 5));
+        }
+    }
+
+
+    @Nested
+    @DisplayName("New instance, add a bunch, then remove all")
+    class AddManyRemoveAllTests {
+
+        RandomizedQueue<Integer> rq;
+
+        @BeforeEach
+        void setUp() {
+            rq = new RandomizedQueue<>();
+            rq.enqueue(1);
+            rq.enqueue(2);
+            rq.enqueue(3);
+            rq.enqueue(4);
+            rq.enqueue(5);
+
+            rq.dequeue();
+            rq.dequeue();
+            rq.dequeue();
+            rq.dequeue();
+            rq.dequeue();
+        }
+
+        @Test
+        @DisplayName("is empty")
+        void isEmpty() {
+            assertTrue(rq.isEmpty());
+        }
+
+        @Test
+        @DisplayName("size is 0")
+        void size() {
+            assertEquals(0, rq.size());
+        }
+
+        @Test
+        @DisplayName("throws when try to sample")
+        void sampleEmpty() {
+            assertThrows(NoSuchElementException.class, () -> rq.sample());
+        }
+
+        @Test
+        @DisplayName("throws when try to pop")
+        void popEmpty() {
+            assertThrows(NoSuchElementException.class, () -> rq.dequeue());
+        }
+
+        @Test
+        @DisplayName("can add a value")
+        void enqueue() {
+            rq.enqueue(1);
+
+            assertFalse(rq.isEmpty());
+            assertEquals(1, rq.size());
+            assertEquals((Integer) 1, rq.sample());
+            assertEquals((Integer) 1, rq.dequeue());
+        }
+
+        @Test
+        @DisplayName("iterator returns []")
+        void iterator() {
+            assertIterableEquals(new ArrayList<>(Arrays.asList()), rq);
         }
     }
 }

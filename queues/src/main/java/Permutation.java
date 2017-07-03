@@ -2,7 +2,6 @@ import edu.princeton.cs.algs4.StdRandom;
 
 public class Permutation {
     public static void main(String[] args) {
-        final int n = args.length - 1;
 
         Deque<String> deque = new Deque<>();
 

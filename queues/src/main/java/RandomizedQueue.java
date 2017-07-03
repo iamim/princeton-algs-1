@@ -39,7 +39,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         items[nextIdx] = null;
 
         if (!isEmpty())
-            StdRandom.shuffle(items, 0, nextIdx - 1);
+            StdRandom.shuffle(items, 0, nextIdx);
 
         if (!isEmpty() && nextIdx == items.length / 4)
             resize(items.length / 2);
