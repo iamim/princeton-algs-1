@@ -1,7 +1,7 @@
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public class Deque<T> implements Iterable<T> {
+public class Deque<Item> implements Iterable<Item> {
     private Node first;
     private Node last;
     private int size;
@@ -20,7 +20,7 @@ public class Deque<T> implements Iterable<T> {
         return size;
     }
 
-    public void addFirst(T item) {
+    public void addFirst(Item item) {
         if (item == null)
             throw new IllegalArgumentException("Can't add null to the deque");
 
@@ -39,7 +39,7 @@ public class Deque<T> implements Iterable<T> {
         size++;
     }
 
-    public void addLast(T item) {
+    public void addLast(Item item) {
         if (item == null)
             throw new IllegalArgumentException("Can't add null to the deque");
 
@@ -58,11 +58,11 @@ public class Deque<T> implements Iterable<T> {
         size++;
     }
 
-    public T removeFirst() {
+    public Item removeFirst() {
         if (isEmpty())
             throw new NoSuchElementException("The deque is empty");
 
-        T toReturn = first.val;
+        Item toReturn = first.val;
 
         if (size() == 1) {
             first = null;
@@ -78,11 +78,11 @@ public class Deque<T> implements Iterable<T> {
         return toReturn;
     }
 
-    public T removeLast() {
+    public Item removeLast() {
         if (isEmpty())
             throw new NoSuchElementException("The deque is empty");
 
-        T toReturn = last.val;
+        Item toReturn = last.val;
 
         if (size() == 1) {
             first = null;
@@ -98,29 +98,29 @@ public class Deque<T> implements Iterable<T> {
         return toReturn;
     }
 
-    public Iterator<T> iterator() {
+    public Iterator<Item> iterator() {
         return new DequeIterator();
     }
 
-    private class DequeIterator implements Iterator<T> {
+    private class DequeIterator implements Iterator<Item> {
         private Node current = first;
 
         public boolean hasNext() {
             return current != null;
         }
 
-        public T next() {
+        public Item next() {
             if (!hasNext())
                 throw new NoSuchElementException();
 
-            T item = current.val;
+            Item item = current.val;
             current = current.nextToLast;
             return item;
         }
     }
 
     private class Node {
-        T val;
+        Item val;
 
         Node nextToFirst;
         Node nextToLast;

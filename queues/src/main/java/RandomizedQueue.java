@@ -3,13 +3,13 @@ import edu.princeton.cs.algs4.StdRandom;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public class RandomizedQueue<T> implements Iterable<T> {
+public class RandomizedQueue<Item> implements Iterable<Item> {
 
-    private T[] items;
+    private Item[] items;
     private int nextIdx;
 
     public RandomizedQueue() {
-        items = (T[]) new Object[1];
+        items = (Item[]) new Object[1];
         nextIdx = 0;
     }
 
@@ -21,7 +21,7 @@ public class RandomizedQueue<T> implements Iterable<T> {
         return nextIdx;
     }
 
-    public void enqueue(T item) {
+    public void enqueue(Item item) {
         if (item == null)
             throw new IllegalArgumentException("Can't put null");
 
@@ -31,11 +31,11 @@ public class RandomizedQueue<T> implements Iterable<T> {
         items[nextIdx++] = item;
     }
 
-    public T dequeue() {
+    public Item dequeue() {
         if (isEmpty())
             throw new NoSuchElementException();
 
-        T toReturn = items[--nextIdx];
+        Item toReturn = items[--nextIdx];
         items[nextIdx] = null;
 
         StdRandom.shuffle(items);
@@ -46,19 +46,19 @@ public class RandomizedQueue<T> implements Iterable<T> {
         return toReturn;
     }
 
-    public T sample() {
+    public Item sample() {
         if (isEmpty())
             throw new NoSuchElementException();
 
         return items[nextIdx - 1];
     }
 
-    public Iterator<T> iterator() {
+    public Iterator<Item> iterator() {
         return new RandomizedQueueIterator();
     }
 
     private void resize(int newSize) {
-        T[] newArray = (T[]) new Object[newSize];
+        Item[] newArray = (Item[]) new Object[newSize];
 
         for (int i = 0; i < nextIdx; i++) {
             newArray[i] = items[i];
@@ -67,12 +67,12 @@ public class RandomizedQueue<T> implements Iterable<T> {
         items = newArray;
     }
 
-    private class RandomizedQueueIterator implements Iterator<T> {
-        private T[] itemLinks;
+    private class RandomizedQueueIterator implements Iterator<Item> {
+        private Item[] itemLinks;
         private int nextLinkIdx;
 
         RandomizedQueueIterator() {
-            itemLinks = (T[]) new Object[nextIdx];
+            itemLinks = (Item[]) new Object[nextIdx];
             nextLinkIdx = 0;
 
             for (int i = 0; i < nextIdx; i++) {
@@ -86,7 +86,7 @@ public class RandomizedQueue<T> implements Iterable<T> {
             return nextLinkIdx < itemLinks.length;
         }
 
-        public T next() {
+        public Item next() {
             if (isEmpty() || !hasNext())
                 throw new NoSuchElementException();
 
