@@ -8,11 +8,11 @@ public class Permutation {
 
         try {
             int k = Integer.parseInt(args[0]);
+            StdRandom.shuffle(args);
 
-            int[] randomIndexes = StdRandom.permutation(n, k);
-            for (int idx : randomIndexes) {
-                System.err.println(idx);
-                deque.addFirst(args[idx + 1]);
+            while (k > 0) {
+                deque.addFirst(args[k + 1]);
+                k--;
             }
         }
         catch (NumberFormatException ex) {
