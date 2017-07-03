@@ -1,29 +1,33 @@
-import edu.princeton.cs.algs4.StdRandom;
+import edu.princeton.cs.algs4.StdIn;
+import edu.princeton.cs.algs4.StdOut;
 
 public class Permutation {
     public static void main(String[] args) {
 
-        Deque<String> deque = new Deque<>();
+        RandomizedQueue<String> rq = new RandomizedQueue<>();
+        int k;
+
+        while(!StdIn.isEmpty()) {
+            String line = StdIn.readString();
+            rq.enqueue(line);
+        }
 
         try {
-            int k = Integer.parseInt(args[0]);
-            StdRandom.shuffle(args);
+            k = Integer.parseInt(args[0]);
 
-            while (k > 0) {
-                deque.addFirst(args[k + 1]);
-                k--;
+            while(!StdIn.isEmpty()) {
+                String line = StdIn.readString();
+                rq.enqueue(line);
             }
         }
         catch (NumberFormatException ex) {
             System.err.println("First argument must be an int");
             return;
         }
-        catch (ArrayIndexOutOfBoundsException outOfBound) {
-            System.err.println("Wrong number of arguments");
-        }
 
-        while (!deque.isEmpty()) {
-            System.out.println(deque.removeFirst());
+        while (k > 0) {
+            StdOut.println(rq.dequeue());
+            k--;
         }
     }
 }
