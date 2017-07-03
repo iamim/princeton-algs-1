@@ -38,7 +38,8 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         Item toReturn = items[--nextIdx];
         items[nextIdx] = null;
 
-        StdRandom.shuffle(items);
+        if (!isEmpty())
+            StdRandom.shuffle(items, 0, nextIdx - 1);
 
         if (!isEmpty() && nextIdx == items.length / 4)
             resize(items.length / 2);
