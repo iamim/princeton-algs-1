@@ -2,6 +2,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import java.util.Comparator;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DisplayName("Point")
@@ -110,6 +112,31 @@ class PointTests {
         @DisplayName("quadrant 4: [0,0].slopeTo([-1,1]) = tan(315)")
         void test9() {
             assertEquals(Math.tan(Math.toRadians(315)), (new Point(0, 0)).slopeTo(new Point(-1, 1)), 0.000001);
+        }
+    }
+
+    @Nested
+    @DisplayName("slopeOrder()")
+    class slopeOrder {
+        Point base = new Point(0, 0);
+        Comparator<Point> comp = base.slopeOrder();
+
+        @Test
+        @DisplayName("(2,2) == (1,1)")
+        void test1() {
+            assertEquals(0, comp.compare(new Point(2,2), new Point(1, 1)));
+        }
+
+        @Test
+        @DisplayName("(2,1) < (1,1)")
+        void test2() {
+            assertEquals(-1, comp.compare(new Point(2,1), new Point(1, 1)));
+        }
+
+        @Test
+        @DisplayName("(1,2) > (1,1)")
+        void test3() {
+            assertEquals(1, comp.compare(new Point(1,2), new Point(1, 1)));
         }
     }
 }
