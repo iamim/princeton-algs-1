@@ -58,7 +58,13 @@ public class FastCollinearPoints {
     }
 
     public LineSegment[] segments() {
-        return protoSegments.stream().map(ProtoSegment::toSegment).toArray(LineSegment[]::new);
+        List<LineSegment> segments = new LinkedList<>();
+
+        for (ProtoSegment proto : protoSegments) {
+            segments.add(proto.toSegment());
+        }
+
+        return segments.toArray(new LineSegment[segments.size()]);
     }
 
     private boolean hasNull(Point[] points) {
