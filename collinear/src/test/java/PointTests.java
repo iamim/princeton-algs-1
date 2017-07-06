@@ -113,6 +113,12 @@ class PointTests {
         void test9() {
             assertEquals(Math.tan(Math.toRadians(315)), (new Point(0, 0)).slopeTo(new Point(-1, 1)), 0.000001);
         }
+
+        @Test
+        @DisplayName("BUG: (1,1).slopeTo((3,2))")
+        void test10() {
+            assertEquals(0.5, (new Point(1, 1)).slopeTo(new Point(3, 2)));
+        }
     }
 
     @Nested
