@@ -4,7 +4,8 @@ import java.util.List;
 
 public class FastCollinearPoints {
 
-    private List<LineSegment> segments = new LinkedList<>();
+//    private List<LineSegment> segments = new LinkedList<>();
+    private List<ProtoSegment> protoSegments = new LinkedList<>();
 
     public FastCollinearPoints(Point[] input) {
         if (input == null)
@@ -53,11 +54,11 @@ public class FastCollinearPoints {
     }
 
     public int numberOfSegments() {
-        return segments.size();
+        return protoSegments.size();
     }
 
     public LineSegment[] segments() {
-        return segments.toArray(new LineSegment[segments.size()]);
+        return protoSegments.stream().map(ProtoSegment::toSegment).toArray(LineSegment[]::new);
     }
 
     private boolean hasNull(Point[] points) {
@@ -76,8 +77,6 @@ public class FastCollinearPoints {
             Point ith = points[i];
             Point next = points[i + 1];
 
-            if (ith == null || next == null)
-                return true;
             if (ith.compareTo(next) == 0)
                 return true;
         }
@@ -89,15 +88,42 @@ public class FastCollinearPoints {
         Point[] allPoints = Arrays.copyOf(otherPoints, otherPoints.length + 1);
         allPoints[otherPoints.length] = refPoint;
 
-        Arrays.sort(allPoints, Point::compareTo);
+        Arrays.sort(allPoints);
 
-        LineSegment newSegment = new LineSegment(allPoints[0], allPoints[allPoints.length - 1]);
+        ProtoSegment newProtoSegment = new ProtoSegment(allPoints[0],
+                allPoints[allPoints.length - 1]);
 
-        for (LineSegment segment : segments) {
-            if (segment.toString().equals(newSegment.toString()))
+        for (ProtoSegment protoSegment : protoSegments) {
+            if (newProtoSegment.equalsTo(protoSegment))
                 return;
         }
 
-        segments.add(newSegment);
+        protoSegments.add(newProtoSegment);
+        //        LineSegment newSegment = new LineSegment(allPoints[0], allPoints[allPoints.length - 1]);
+        //
+        //        for (LineSegment segment : segments) {
+        //            if (segment.toString().equals(newSegment.toString()))
+        //                return;
+        //        }
+        //
+        //        segments.add(newSegment);
+    }
+
+    private class ProtoSegment {
+        final Point lo;
+        final Point hi;
+
+        ProtoSegment(Point lo, Point hi) {
+            this.lo = lo;
+            this.hi = hi;
+        }
+
+        LineSegment toSegment() {
+            return new LineSegment(lo, hi);
+        }
+
+        boolean equalsTo(ProtoSegment other) {
+            return this.lo.compareTo(other.lo) == 0 && this.hi.compareTo(other.hi) == 0;
+        }
     }
 }

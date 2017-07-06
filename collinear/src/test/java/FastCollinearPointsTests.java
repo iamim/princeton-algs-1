@@ -260,8 +260,33 @@ class FastCollinearPointsTests {
         }
     }
 
+    @Nested
+    @DisplayName("BUG: test (13, 0) -> (10, 1) -> (7, 2) -> (4, 3)")
+    class bug1 {
+
+        FastCollinearPoints fast;
+
+        @BeforeEach
+        void setUp() {
+            List<Point> inputList = new ArrayList<>();
+
+            inputList.add(new Point(13, 0));
+            inputList.add(new Point(10, 1));
+            inputList.add(new Point(7, 2));
+            inputList.add(new Point(4, 3));
+
+            fast = new FastCollinearPoints(inputList.toArray(new Point[inputList.size()]));
+        }
+
+        @Test
+        @DisplayName("finds 1 segments")
+        void nOfSegments() {
+            assertEquals(1, fast.numberOfSegments());
+        }
+    }
+
 //    @Nested
-//    @DisplayName("When a 7x7 is passed")
+//    @DisplayName("When a 15x4 is passed")
 //    class sevenBySevenTest {
 //
 //        FastCollinearPoints fast;
@@ -270,8 +295,8 @@ class FastCollinearPointsTests {
 //        void setUp() {
 //            List<Point> inputList = new ArrayList<>();
 //
-//            for (int i = 1; i <= 7; i++) {
-//                for (int j = 1; j <= 7; j++) {
+//            for (int i = 1; i <= 15; i++) {
+//                for (int j = 1; j <= 4; j++) {
 //                    inputList.add(new Point(i, j));
 //                }
 //            }
@@ -280,9 +305,9 @@ class FastCollinearPointsTests {
 //        }
 //
 //        @Test
-//        @DisplayName("finds 28 segments")
+//        @DisplayName("finds 79 segments")
 //        void nOfSegments() {
-//            assertEquals(28, fast.numberOfSegments());
+//            assertEquals(79, fast.numberOfSegments());
 //        }
 //    }
 
