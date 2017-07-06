@@ -3,10 +3,13 @@ import java.util.Arrays;
 public class BruteCollinearPoints {
     private LineSegment[] segments = new LineSegment[0];
 
-    public BruteCollinearPoints(Point[] points) {
-        if (points == null)
+    public BruteCollinearPoints(Point[] input) {
+        if (input == null)
             throw new IllegalArgumentException(
                     "The input shouldn't be null");
+
+        // Protective copying
+        Point[] points = Arrays.copyOf(input, input.length);
 
         if (points.length < 4)
             return;
