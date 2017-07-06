@@ -23,15 +23,15 @@ public class FastCollinearPoints {
             return;
 
         for (Point basePoint : points) {
-            Arrays.sort(points, basePoint.slopeOrder());
+            Arrays.sort(points, basePoint.slopeOrder()); // n^2 * lg(n)
 
-            Double previousSlope = null;
+            double previousSlope = Double.NEGATIVE_INFINITY;
             int nWithSameSlope = 1;
-            for (int j = 0; j < points.length; j++) {
+            for (int j = 1; j < points.length; j++) {
                 Point jthPoint = points[j];
 
                 double jthSlope = basePoint.slopeTo(jthPoint);
-                if (previousSlope != null && jthSlope == previousSlope) {
+                if (jthSlope == previousSlope) {
                     nWithSameSlope++;
                 }
                 else {
