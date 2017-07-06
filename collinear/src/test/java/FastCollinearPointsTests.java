@@ -28,13 +28,6 @@ class FastCollinearPointsTests {
         }
 
         @Test
-        @DisplayName("when less than 4 points are passed")
-        void lessThan4Passed() {
-            assertThrows(IllegalArgumentException.class, () -> new FastCollinearPoints(
-                    new Point[] {new Point(1, 1), new Point(2, 2), new Point(3, 3)}));
-        }
-
-        @Test
         @DisplayName("when at least one passed point is null")
         void oneIsNullTest() {
             assertThrows(IllegalArgumentException.class, () -> new FastCollinearPoints(
@@ -49,6 +42,33 @@ class FastCollinearPointsTests {
                             new Point(3, 3)}));
         }
     }
+
+
+    @Nested
+    @DisplayName("When less than 4 points are passed")
+    class lessThan3 {
+
+        FastCollinearPoints fast;
+
+        @BeforeEach
+        void setUp() {
+            fast = new FastCollinearPoints(
+                    new Point[] {new Point(1, 1), new Point(2, 2), new Point(3, 3)});
+        }
+
+        @Test
+        @DisplayName("finds 0 segment")
+        void nOfSegments() {
+            assertEquals(0, fast.numberOfSegments());
+        }
+
+        @Test
+        @DisplayName("segments return an empty array")
+        void segments() {
+            assertArrayEquals(new LineSegment[0], fast.segments());
+        }
+    }
+
 
     @Nested
     @DisplayName("When a diagonal line of 4 is passed")
@@ -76,6 +96,7 @@ class FastCollinearPointsTests {
         }
     }
 
+
     @Nested
     @DisplayName("When a diagonal line of 3 is passed")
     class diagonal3Test {
@@ -102,6 +123,7 @@ class FastCollinearPointsTests {
         }
     }
 
+
     @Nested
     @DisplayName("When 5 points are passed, 4 are diagonal")
     class diagonal4WithAdditionalTest {
@@ -111,8 +133,8 @@ class FastCollinearPointsTests {
         @BeforeEach
         void setUp() {
             fast = new FastCollinearPoints(
-                    new Point[] {new Point(1, 1), new Point(2, 2), new Point(3, 3),
-                            new Point(4, 4), new Point(2, 1)});
+                    new Point[] {new Point(1, 1), new Point(2, 2), new Point(3, 3), new Point(4, 4),
+                            new Point(2, 1)});
         }
 
         @Test
@@ -127,6 +149,7 @@ class FastCollinearPointsTests {
             assertEquals("(1, 1) -> (4, 4)", fast.segments()[0].toString());
         }
     }
+
 
     @Nested
     @DisplayName("When a 4x4 is passed")
@@ -167,6 +190,7 @@ class FastCollinearPointsTests {
                             "(1, 4) -> (4, 4)"));
         }
     }
+
 
     @Nested
     @DisplayName("When a 5x5 is passed")

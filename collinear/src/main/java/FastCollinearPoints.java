@@ -5,9 +5,12 @@ public class FastCollinearPoints {
     private LineSegment[] segments = new LineSegment[0];
 
     public FastCollinearPoints(Point[] points) {
-        if (points == null || points.length < 4)
+        if (points == null)
             throw new IllegalArgumentException(
-                    "The input shouldn't be null or shorter than 4 Points");
+                    "The input shouldn't be null");
+
+        if (points.length < 4)
+            return;
 
         if (hasNull(points))
             throw new IllegalArgumentException("The input contains null values");
@@ -49,7 +52,7 @@ public class FastCollinearPoints {
     }
 
     public LineSegment[] segments() {
-        return segments;
+        return Arrays.copyOf(segments, segments.length);
     }
 
     private boolean hasNull(Point[] points) {

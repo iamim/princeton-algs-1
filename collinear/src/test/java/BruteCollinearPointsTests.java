@@ -25,13 +25,6 @@ class BruteCollinearPointsTests {
         }
 
         @Test
-        @DisplayName("when less than 4 points are passed")
-        void lessThan4Passed() {
-            assertThrows(IllegalArgumentException.class, () -> new BruteCollinearPoints(
-                    new Point[] {new Point(1, 1), new Point(2, 2), new Point(3, 3)}));
-        }
-
-        @Test
         @DisplayName("when at least one passed point is null")
         void oneIsNullTest() {
             assertThrows(IllegalArgumentException.class, () -> new BruteCollinearPoints(
@@ -47,6 +40,33 @@ class BruteCollinearPointsTests {
         }
     }
 
+
+    @Nested
+    @DisplayName("When less than 4 points are passed")
+    class lessThan3 {
+
+        BruteCollinearPoints brute;
+
+        @BeforeEach
+        void setUp() {
+            brute = new BruteCollinearPoints(
+                    new Point[] {new Point(1, 1), new Point(2, 2), new Point(3, 3)});
+        }
+
+        @Test
+        @DisplayName("finds 0 segment")
+        void nOfSegments() {
+            assertEquals(0, brute.numberOfSegments());
+        }
+
+        @Test
+        @DisplayName("segments return an empty array")
+        void segments() {
+            assertArrayEquals(new LineSegment[0], brute.segments());
+        }
+    }
+
+
     @Nested
     @DisplayName("When a diagonal line of 3 is passed")
     class diagonal3Test {
@@ -56,8 +76,8 @@ class BruteCollinearPointsTests {
         @BeforeEach
         void setUp() {
             brute = new BruteCollinearPoints(
-                    new Point[] {new Point(2, 2), new Point(3, 3),
-                            new Point(4, 4), new Point(2, 1)});
+                    new Point[] {new Point(2, 2), new Point(3, 3), new Point(4, 4),
+                            new Point(2, 1)});
         }
 
         @Test
