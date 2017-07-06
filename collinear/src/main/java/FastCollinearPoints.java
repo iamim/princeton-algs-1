@@ -6,20 +6,19 @@ public class FastCollinearPoints {
 
     public FastCollinearPoints(Point[] input) {
         if (input == null)
-            throw new IllegalArgumentException(
-                    "The input shouldn't be null");
+            throw new IllegalArgumentException("The input shouldn't be null");
 
         // Protective copying
         Point[] points = Arrays.copyOf(input, input.length);
-
-        if (points.length < 4)
-            return;
 
         if (hasNull(points))
             throw new IllegalArgumentException("The input contains null values");
 
         if (sortAndFindDuplicates(points))
             throw new IllegalArgumentException("The input should not contain duplicates or nulls");
+
+        if (points.length < 4)
+            return;
 
         for (Point basePoint : points) {
             Arrays.sort(points, basePoint.slopeOrder());
@@ -45,7 +44,8 @@ public class FastCollinearPoints {
             }
 
             if (nWithSameSlope > 2) {
-                addSegment(basePoint, Arrays.copyOfRange(points, points.length - nWithSameSlope, points.length));
+                addSegment(basePoint,
+                        Arrays.copyOfRange(points, points.length - nWithSameSlope, points.length));
             }
         }
     }
@@ -91,14 +91,14 @@ public class FastCollinearPoints {
 
         LineSegment newSegment = new LineSegment(allPoints[0], allPoints[allPoints.length - 1]);
 
-            for (LineSegment segment : segments) {
-                if (segment.toString().equals(newSegment.toString()))
-                    return;
-            }
+        for (LineSegment segment : segments) {
+            if (segment.toString().equals(newSegment.toString()))
+                return;
+        }
 
-            LineSegment[] newSegments = Arrays.copyOf(segments, segments.length + 1);
-            newSegments[newSegments.length - 1] = newSegment;
+        LineSegment[] newSegments = Arrays.copyOf(segments, segments.length + 1);
+        newSegments[newSegments.length - 1] = newSegment;
 
-            segments = newSegments;
+        segments = newSegments;
     }
 }

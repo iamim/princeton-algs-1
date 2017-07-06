@@ -5,20 +5,19 @@ public class BruteCollinearPoints {
 
     public BruteCollinearPoints(Point[] input) {
         if (input == null)
-            throw new IllegalArgumentException(
-                    "The input shouldn't be null");
+            throw new IllegalArgumentException("The input shouldn't be null");
 
         // Protective copying
         Point[] points = Arrays.copyOf(input, input.length);
-
-        if (points.length < 4)
-            return;
 
         if (hasNull(points))
             throw new IllegalArgumentException("The input contains null values");
 
         if (sortAndFindDuplicates(points))
             throw new IllegalArgumentException("The input should not contain duplicates or nulls");
+
+        if (points.length < 4)
+            return;
 
         for (int i = 0; i < points.length - 3; i++) {
             Point p1 = points[i];
