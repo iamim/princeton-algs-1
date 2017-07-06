@@ -1,8 +1,10 @@
 import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 public class FastCollinearPoints {
 
-    private LineSegment[] segments = new LineSegment[0];
+    private List<LineSegment> segments = new LinkedList<>();
 
     public FastCollinearPoints(Point[] input) {
         if (input == null)
@@ -51,11 +53,11 @@ public class FastCollinearPoints {
     }
 
     public int numberOfSegments() {
-        return segments.length;
+        return segments.size();
     }
 
     public LineSegment[] segments() {
-        return Arrays.copyOf(segments, segments.length);
+        return segments.toArray(new LineSegment[segments.size()]);
     }
 
     private boolean hasNull(Point[] points) {
@@ -96,9 +98,6 @@ public class FastCollinearPoints {
                 return;
         }
 
-        LineSegment[] newSegments = Arrays.copyOf(segments, segments.length + 1);
-        newSegments[newSegments.length - 1] = newSegment;
-
-        segments = newSegments;
+        segments.add(newSegment);
     }
 }
