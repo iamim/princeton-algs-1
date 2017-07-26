@@ -1,7 +1,4 @@
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -285,55 +282,28 @@ class FastCollinearPointsTests {
         }
     }
 
-//    @Nested
-//    @DisplayName("When a 15x4 is passed")
-//    class sevenBySevenTest {
-//
-//        FastCollinearPoints fast;
-//
-//        @BeforeEach
-//        void setUp() {
-//            List<Point> inputList = new ArrayList<>();
-//
-//            for (int i = 1; i <= 15; i++) {
-//                for (int j = 1; j <= 4; j++) {
-//                    inputList.add(new Point(i, j));
-//                }
-//            }
-//
-//            fast = new FastCollinearPoints(inputList.toArray(new Point[inputList.size()]));
-//        }
-//
-//        @Test
-//        @DisplayName("finds 79 segments")
-//        void nOfSegments() {
-//            assertEquals(79, fast.numberOfSegments());
-//        }
-//    }
+    @Nested
+    @DisplayName("BUG: test (2000, 29000) -> (4000, 29000) -> (22000, 29000) -> (28000, 29000)")
+    static class bug2 {
 
-//    @Nested
-//    @DisplayName("When a 15x15 is passed")
-//    class fifteenByFifteenTest {
-//
-//        FastCollinearPoints fast;
-//
-//        @BeforeEach
-//        void setUp() {
-//            List<Point> inputList = new ArrayList<>();
-//
-//            for (int i = 1; i <= 15; i++) {
-//                for (int j = 1; j <= 15; j++) {
-//                    inputList.add(new Point(i, j));
-//                }
-//            }
-//
-//            fast = new FastCollinearPoints(inputList.toArray(new Point[inputList.size()]));
-//        }
-//
-//        @Test
-//        @DisplayName("finds 76 segments")
-//        void nOfSegments() {
-//            assertEquals(76, fast.numberOfSegments());
-//        }
-//    }
+        static FastCollinearPoints fast;
+
+        @BeforeAll
+        static void setUp() {
+            List<Point> inputList = new ArrayList<>();
+
+            inputList.add(new Point(2000, 29000));
+            inputList.add(new Point(4000, 29000));
+            inputList.add(new Point(22000, 29000));
+            inputList.add(new Point(28000, 29000));
+
+            fast = new FastCollinearPoints(inputList.toArray(new Point[inputList.size()]));
+        }
+
+        @Test
+        @DisplayName("finds 1 segments")
+        void nOfSegments() {
+            assertEquals(1, fast.numberOfSegments());
+        }
+    }
 }
