@@ -1,11 +1,9 @@
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class FastCollinearPoints {
 
-//    private List<LineSegment> segments = new LinkedList<>();
-    private List<ProtoSegment> protoSegments = new LinkedList<>();
+    private LineSegment[] segments;
+    private List<ProtoSegment> protoSegments = new ArrayList<>();
 
     public FastCollinearPoints(Point[] input) {
         if (input == null)
@@ -18,10 +16,12 @@ public class FastCollinearPoints {
             throw new IllegalArgumentException("The input contains null values");
 
         if (sortAndFindDuplicates(points))
-            throw new IllegalArgumentException("The input should not contain duplicates or nulls");
+            throw new IllegalArgumentException("The input should not contain duplicates");
 
-        if (points.length < 4)
+        if (points.length < 4) {
+            segments = new LineSegment[0];
             return;
+        }
 
         for (Point basePoint : points) {
             Arrays.sort(points, basePoint.slopeOrder()); // n^2 * lg(n)
@@ -31,13 +31,13 @@ public class FastCollinearPoints {
             for (int j = 1; j < points.length; j++) {
                 Point jthPoint = points[j];
 
-                double jthSlope = basePoint.slopeTo(jthPoint);
+                double jthSlope = basePoint.slopeTo(jthPoint); // n^2
                 if (jthSlope == previousSlope) {
                     nWithSameSlope++;
                 }
                 else {
-                    if (nWithSameSlope > 2) {
-                        addSegment(basePoint, Arrays.copyOfRange(points, j - nWithSameSlope, j));
+                    if (nWithSameSlope >= 3) {
+                        addProtoSegment(basePoint, Arrays.copyOfRange(points, j - nWithSameSlope, j));
                     }
 
                     nWithSameSlope = 1;
@@ -46,25 +46,41 @@ public class FastCollinearPoints {
                 previousSlope = jthSlope;
             }
 
-            if (nWithSameSlope > 2) {
-                addSegment(basePoint,
+            if (nWithSameSlope >= 3) {
+                addProtoSegment(basePoint,
                         Arrays.copyOfRange(points, points.length - nWithSameSlope, points.length));
             }
+        }
+
+        protoSegmentsToSegments();
+    }
+
+    private void protoSegmentsToSegments() {
+        Collections.sort(protoSegments);
+        removeDuplicateProtoSegments(protoSegments);
+
+        segments = new LineSegment[protoSegments.size()];
+
+        for (int i = 0; i < protoSegments.size(); i++) {
+            ProtoSegment proto = protoSegments.get(i);
+            segments[i] = proto.toSegment();
+        }
+    }
+
+    private void removeDuplicateProtoSegments(List<ProtoSegment> list) {
+        if (list.size() <= 1) return;
+
+        for (int i = list.size() - 2; i >= 0; i--) {
+            if (list.get(i).compareTo(list.get(i + 1)) == 0) list.remove(i + 1);
         }
     }
 
     public int numberOfSegments() {
-        return protoSegments.size();
+        return segments.length;
     }
 
     public LineSegment[] segments() {
-        List<LineSegment> segments = new LinkedList<>();
-
-        for (ProtoSegment proto : protoSegments) {
-            segments.add(proto.toSegment());
-        }
-
-        return segments.toArray(new LineSegment[segments.size()]);
+        return segments;
     }
 
     private boolean hasNull(Point[] points) {
@@ -77,7 +93,7 @@ public class FastCollinearPoints {
     }
 
     private boolean sortAndFindDuplicates(Point[] points) {
-        Arrays.sort(points, Point::compareTo);
+        Arrays.sort(points);
 
         for (int i = 0; i < points.length - 1; i++) {
             Point ith = points[i];
@@ -90,7 +106,7 @@ public class FastCollinearPoints {
         return false;
     }
 
-    private void addSegment(Point refPoint, Point[] otherPoints) {
+    private void addProtoSegment(Point refPoint, Point[] otherPoints) {
         Point[] allPoints = Arrays.copyOf(otherPoints, otherPoints.length + 1);
         allPoints[otherPoints.length] = refPoint;
 
@@ -99,23 +115,15 @@ public class FastCollinearPoints {
         ProtoSegment newProtoSegment = new ProtoSegment(allPoints[0],
                 allPoints[allPoints.length - 1]);
 
-        for (ProtoSegment protoSegment : protoSegments) {
-            if (newProtoSegment.equalsTo(protoSegment))
-                return;
-        }
+//        for (ProtoSegment protoSegment : protoSegments) {
+//            if (newProtoSegment.equalsTo(protoSegment))
+//                return;
+//        }
 
         protoSegments.add(newProtoSegment);
-        //        LineSegment newSegment = new LineSegment(allPoints[0], allPoints[allPoints.length - 1]);
-        //
-        //        for (LineSegment segment : segments) {
-        //            if (segment.toString().equals(newSegment.toString()))
-        //                return;
-        //        }
-        //
-        //        segments.add(newSegment);
     }
 
-    private class ProtoSegment {
+    private class ProtoSegment implements Comparable<ProtoSegment>{
         final Point lo;
         final Point hi;
 
@@ -128,8 +136,12 @@ public class FastCollinearPoints {
             return new LineSegment(lo, hi);
         }
 
-        boolean equalsTo(ProtoSegment other) {
-            return this.lo.compareTo(other.lo) == 0 && this.hi.compareTo(other.hi) == 0;
+        public int compareTo(ProtoSegment that) {
+            if (this.lo.compareTo(that.lo) == 0) {
+                return this.hi.compareTo(that.hi);
+            }
+
+            return this.lo.compareTo(that.lo);
         }
     }
 }
