@@ -91,6 +91,8 @@ public class Board {
 
         Board other = (Board) y;
 
+        if (this.n != other.n) return false;
+
         for (int i = 0; i < this.n; i++) {
             for (int j = 0; j <this.n; j++) {
                 if (this.blocks[i][j] != other.blocks[i][j]) return false;
