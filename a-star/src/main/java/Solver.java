@@ -7,22 +7,18 @@ public class Solver {
     private final static Comparator<SearchNode> MANHATTAN_COMPARATOR = Comparator.comparingInt(
             n -> (n.movesToHere + n.board.manhattan()));
 
-    private final static Comparator<SearchNode> HAMMING_COMPARATOR = Comparator.comparingInt(
-            n -> (n.movesToHere + n.board.hamming()));
-
-    private final MinPQ<SearchNode> mainPQ = new MinPQ<>(MANHATTAN_COMPARATOR);
-    private final MinPQ<SearchNode> twinPQ = new MinPQ<>(MANHATTAN_COMPARATOR);
-
     private final boolean initialIsSolvable;
     private final LinkedList<Board> solution = new LinkedList<>();
-
 
     // find a solution to the initial board (using the A* algorithm)
     public Solver(Board initial) {
         boolean mainTurn = true;
         SearchNode solved = null;
 
+        MinPQ<SearchNode> mainPQ = new MinPQ<>(MANHATTAN_COMPARATOR);
         mainPQ.insert(new SearchNode(initial, null, 0));
+
+        MinPQ<SearchNode> twinPQ = new MinPQ<>(MANHATTAN_COMPARATOR);
         twinPQ.insert(new SearchNode(initial.twin(), null, 0));
 
         while (solved == null) {
