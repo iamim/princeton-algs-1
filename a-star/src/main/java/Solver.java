@@ -50,7 +50,7 @@ public class Solver {
         if (min.board.isGoal()) return min;
 
         for (Board neighbor : min.board.neighbors()) {
-            if (neighbor.equals(min.prev.board)) continue;
+            if (min.prev != null && neighbor.equals(min.prev.board)) continue;
 
             PQ.insert(new SearchNode(neighbor, min, min.movesToHere + 1));
         }
