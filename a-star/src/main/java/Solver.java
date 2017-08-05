@@ -65,7 +65,7 @@ public class Solver {
 
     // min number of moves to solve initial board; -1 if unsolvable
     public int moves() {
-        if (initialIsSolvable) return solution.size();
+        if (initialIsSolvable) return solution.size() - 1;
         return -1;
     }
 
