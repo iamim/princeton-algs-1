@@ -86,7 +86,18 @@ public class Board {
 
     // does this board equal y?
     public boolean equals(Object y) {
-        return false;
+        if (this == y) return true;
+        if ( !(y instanceof Board)) return false;
+
+        Board other = (Board) y;
+
+        for (int i = 0; i < this.n; i++) {
+            for (int j = 0; j <this.n; j++) {
+                if (this.blocks[i][j] != other.blocks[i][j]) return false;
+            }
+        }
+
+        return true;
     }
 
     // all neighboring boards
