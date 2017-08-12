@@ -42,4 +42,11 @@ public class KdTree {
     public Point2D nearest(Point2D p) {
         return null;
     }
+
+    private static class Node {
+        private Point2D p;
+        private RectHV rect;
+        private Node lb;
+        private Node rt;
+    }
 }
