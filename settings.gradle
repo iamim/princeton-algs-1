@@ -3,4 +3,5 @@ include 'percolation'
 include 'queues'
 include 'collinear'
 include 'a-star'
+include 'kd-tree'
 
