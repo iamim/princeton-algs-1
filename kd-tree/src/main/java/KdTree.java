@@ -2,6 +2,9 @@ import edu.princeton.cs.algs4.Point2D;
 import edu.princeton.cs.algs4.RectHV;
 import edu.princeton.cs.algs4.StdDraw;
 
+import java.util.LinkedList;
+import java.util.List;
+
 public class KdTree {
 
     private static boolean VERT = true;
@@ -32,6 +35,8 @@ public class KdTree {
 
         if (contains(p))
             return;
+
+        nOfNodes += 1;
 
         root = insertHelper(VERT, root, p, 0, 0, 1, 1);
     }
@@ -119,7 +124,34 @@ public class KdTree {
 
     // all points that are inside the rectangle (or on the boundary)
     public Iterable<Point2D> range(RectHV rect) {
-        return null;
+        if (rect == null)
+            throw new IllegalArgumentException();
+
+        return rangeHelper(VERT, root, new LinkedList<>(), rect);
+    }
+
+    private static List<Point2D> rangeHelper(boolean orient, Node parent, List<Point2D> list, RectHV rect) {
+        if (parent == null || !parent.rect.intersects(rect)) return list;
+
+        if (rect.contains(parent.p))
+            list.add(parent.p);
+
+        if (orient == VERT) {
+            if (rect.xmin() < parent.p.x())
+                rangeHelper(HORIZ, parent.lb, list, rect);
+
+            if (rect.xmax() >= parent.p.x())
+                rangeHelper(HORIZ, parent.rt, list, rect);
+        }
+        else {
+            if (rect.ymin() < parent.p.y())
+                rangeHelper(VERT, parent.lb, list, rect);
+
+            if (rect.ymax() >= parent.p.y())
+                rangeHelper(VERT, parent.rt, list, rect);
+        }
+
+        return list;
     }
 
     // a nearest neighbor in the set to point p; null if the set is empty
